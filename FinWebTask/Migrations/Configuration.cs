@@ -4,7 +4,10 @@ namespace FinWebTask.Migrations
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
+    using System.Net;
 
     internal sealed class Configuration : DbMigrationsConfiguration<FinWebTask.Models.FinContext>
     {
@@ -15,31 +18,36 @@ namespace FinWebTask.Migrations
 
         protected override void Seed(FinWebTask.Models.FinContext context)
         {
-            context.TickerInfo.AddOrUpdate(
-                p => p.Ticker,
-                new TickerInfo()
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://195.128.78.52/GAZP_121027_141027.csv?market=1&em=16842&code=GAZP&df=27&mf=9&yf=2012&from=01.01.2012&dt=27&mt=9&yt=" +DateTime.Now.Year +  "&to=" + DateTime.Now.ToString("dd.MM.yyyy") + "&p=7&f=GAZP_141027_141027&e=.csv&cn=GAZP&dtf=1&tmf=1&MSOR=1&mstime=on&mstimever=1&sep=3&sep2=1&datf=1&at=1");
+            var response = request.GetResponse();
+            using (var streamReader = new StreamReader(response.GetResponseStream()))
+            {
+                var csv = new CsvHelper.CsvReader(streamReader);
+                csv.Configuration.Delimiter = ";";
+                NumberFormatInfo provider = new NumberFormatInfo();
+                provider.NumberGroupSeparator = ".";
+                while (csv.Read())
                 {
-                    Ticker = "TEST",
-                    Vol = 123,
-                    Per = 123,
-                    Open = 123,
-                    Low = 123,
-                    High = 123,
-                    Close = 123,
-                    DateTime = DateTime.Now
-                });
-            //  This method will be called after migrating to the latest version.
+                    var tickerInfo = new TickerInfo()
+                    {
+                        Ticker = csv.GetField<string>("<TICKER>"),
+                        Per = csv.GetField<decimal>("<PER>"),
+                        Open = Convert.ToDouble(csv.GetField<string>("<OPEN>"), provider),
+                        High = Convert.ToDouble(csv.GetField<string>("<HIGH>"), provider),
+                        Low = Convert.ToDouble(csv.GetField<string>("<LOW>"), provider),
+                        Close = Convert.ToDouble(csv.GetField<string>("<CLOSE>"), provider),
+                        Vol = csv.GetField<decimal>("<VOL>"),
+                        DateTime = DateTime.ParseExact(csv.GetField<string>("<DATE>") + csv.GetField<string>("<TIME>"), "yyyyMMddHHmmss", provider)
+                    };
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+                    context.TickerInfo.AddOrUpdate(
+                        p => new { p.Ticker, p.DateTime },
+                        tickerInfo  
+                    );
+
+                }
+                context.SaveChanges();
+            }
         }
     }
 }
