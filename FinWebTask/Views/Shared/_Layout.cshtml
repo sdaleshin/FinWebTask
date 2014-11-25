@@ -21,7 +21,12 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>*@
+                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                    *@
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a>Последнее обновление базы данных было @DateTime.Now</a></li>
+                    <li><button class="btn btn-default" style="margin-top:7px">Обновить</button></li>
                 </ul>
             </div>
         </div>

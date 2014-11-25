@@ -1,10 +1,23 @@
-﻿<div class="jumbotron">
-    <h1>FinWebTask</h1>
-    <p class="lead">Здесь какой-то умный текст</p>
-    <p><a class="btn btn-primary btn-large">Обновить данные</a></p>
-</div>
-<h2>
-    Последние загруженные данные
+﻿<form role="form-inline" style="margin-top: 20px; height: 70px">
+    <div class="form-group" style="width: 300px; float: left">
+        <label for="exampleInputEmail1">Период</label>
+        <input type="email" class="form-control" id="searchRange" placeholder="Период">
+    </div>
+    <div class="form-group" style="float: left; width: 300px;">
+        <label for="exampleInputPassword1">Название</label>
+        <select class="form-control">
+            <option value="GAZP">Газпром
+            </option>
+            <option value="GAZP">Лукойл
+            </option>
+            <option value="GAZP">Автоваз
+            </option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-default" style="margin-top: 24px">Искать</button>
+</form>
+
+<h2>Найденные тикеры
 </h2>
 <table class="table table-striped">
     <thead>
@@ -31,3 +44,11 @@
 
     </tbody>
 </table>
+@section scripts
+{
+   <script type="text/javascript">
+       $(function () {
+           $('#searchRange').daterangepicker();
+       })
+   </script>
+}
