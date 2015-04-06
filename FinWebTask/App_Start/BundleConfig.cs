@@ -20,6 +20,8 @@ namespace FinWebTask
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/moment.js",
                       "~/Scripts/daterangepicker.js",
+                      "~/Scripts/highcharts.js",
+                      "~/Scripts/underscore.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

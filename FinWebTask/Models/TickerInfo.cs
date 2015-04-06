@@ -9,7 +9,7 @@ namespace FinWebTask.Models
 {
     [Table("TickerInfo")]
     public class TickerInfo
-    {     
+    {
         public TickerInfo()
         {
             Id = Guid.NewGuid();
@@ -24,5 +24,12 @@ namespace FinWebTask.Models
         public double Low { get; set; }
         public double Close { get; set; }
         public decimal Vol { get; set; }
+        public double AVG
+        {
+            get
+            {
+                return (Open + High + Low + Close) / 4.0;
+            }
+        }
     }
 }

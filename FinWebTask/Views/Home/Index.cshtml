@@ -1,54 +1,120 @@
 ﻿<form role="form-inline" style="margin-top: 20px; height: 70px">
     <div class="form-group" style="width: 300px; float: left">
-        <label for="exampleInputEmail1">Период</label>
-        <input type="email" class="form-control" id="searchRange" placeholder="Период">
+        <label>Период</label>
+        <input type="texts" class="form-control" id="searchRange" placeholder="Период">
     </div>
     <div class="form-group" style="float: left; width: 300px;">
-        <label for="exampleInputPassword1">Название</label>
-        <select class="form-control">
+        <label>Название</label>
+        <select class="form-control ticker-select">
             <option value="GAZP">Газпром
             </option>
-            <option value="GAZP">Лукойл
+            @*            <option value="GAZP">Лукойл
             </option>
             <option value="GAZP">Автоваз
-            </option>
+            </option>*@
         </select>
     </div>
-    <button type="submit" class="btn btn-default" style="margin-top: 24px">Искать</button>
+    <input type="button" class="btn btn-default start-prediction" style="margin-top: 24px" value="Построить прогноз" />
 </form>
-
-<h2>Найденные тикеры
-</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Ticker</th>
-            <th>Date</th>
-            <th>Open</th>
-            <th>Close</th>
-            <th>High</th>
-            <th>Low</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var tickerInfo in ViewBag.TickerData){
+<div class="main-content">
+    <div class="prediction-result" style="display:none">
+        <h2>Прогноз
+        </h2>
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+    <h2>Последние загруженные тикеры
+    </h2>
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@tickerInfo.Ticker</td>
-                <td>@tickerInfo.DateTime</td>
-                <td>@tickerInfo.Open</td>
-                <td>@tickerInfo.Close</td>
-                <td>@tickerInfo.High</td>
-                <td>@tickerInfo.Low</td>
+                <th>Ticker</th>
+                <th>Date</th>
+                <th>Average</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var tickerInfo in ViewBag.TickerData)
+            {
+                <tr>
+                    <td>@tickerInfo.Ticker</td>
+                    <td>@tickerInfo.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@tickerInfo.AVG</td>
+                </tr>
+            }
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 @section scripts
 {
-   <script type="text/javascript">
-       $(function () {
-           $('#searchRange').daterangepicker();
-       })
-   </script>
+    <script type="text/javascript">
+        var startDate, endDate;
+        $(function () {
+            $('#searchRange').daterangepicker(
+                {
+                    format: 'DD.MM.YYYY',
+                },
+                function (start, end, label) {
+                    startDate = start;
+                    endDate = end;
+                });
+            $('.start-prediction').on('click', function () {
+                var data = {
+                    StartDate: startDate.toJSON(),
+                    EndDate: endDate.toJSON(),
+                    Ticker: $('.ticker-select').val()
+                }
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    url: '/Home/GetPredictionData',
+                    data: JSON.stringify(data),
+                    success: function (resp) {
+                        showPlots(resp);
+                    }
+                });
+            })
+        });
+        function showPlots(resp) {
+            var xCategories = _.chain(resp.tickers).pluck('Date').map(function (m) { return moment(m).format('DD.MM.YYYY') }).value();
+            $('.prediction-result').show();
+            $('#container').highcharts({
+                title: {
+                    text: 'График средних значений ' + $('.ticker-select').val(),
+                    x: -20 //center
+                },
+                subtitle: {
+                    text: '',
+                    x: -20
+                },
+                xAxis: {
+                    categories: xCategories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Значение'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: $('.ticker-select').val(),
+                    data: _.chain(resp.tickers).pluck('AVG').map(function (m) { return Number(Number(m).toFixed(2)); }).value()
+                }]
+            });
+        }
+    </script>
 }
