@@ -6,6 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\FinPublish</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/HelpPage/HelpPage.css">
@@ -60,7 +61,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/01/2014 12:48:19</publishTime>
     </File>
     <File Include="bin/FinWebTask.dll">
-      <publishTime>04/03/2015 15:03:50</publishTime>
+      <publishTime>04/06/2015 21:02:27</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>11/01/2014 12:48:35</publishTime>
@@ -132,7 +133,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/01/2014 12:44:26</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>11/01/2014 12:44:26</publishTime>
+      <publishTime>04/06/2015 12:39:30</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>11/01/2014 12:44:26</publishTime>
@@ -142,6 +143,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Scripts/daterangepicker.js">
       <publishTime>11/25/2014 23:23:30</publishTime>
+    </File>
+    <File Include="Scripts/highcharts.js">
+      <publishTime>04/06/2015 12:27:55</publishTime>
     </File>
     <File Include="Scripts/jquery-1.10.2.js">
       <publishTime>11/01/2014 12:44:26</publishTime>
@@ -164,11 +168,20 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Scripts/respond.min.js">
       <publishTime>11/01/2014 12:44:26</publishTime>
     </File>
+    <File Include="Scripts/underscore.js">
+      <publishTime>04/06/2015 12:39:30</publishTime>
+    </File>
+    <File Include="Scripts/underscore.min.js">
+      <publishTime>04/06/2015 12:39:30</publishTime>
+    </File>
+    <File Include="Scripts/underscore.min.map">
+      <publishTime>04/06/2015 12:39:30</publishTime>
+    </File>
     <File Include="Scripts/_references.js">
       <publishTime>11/01/2014 12:44:26</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>11/25/2014 23:54:52</publishTime>
+      <publishTime>04/09/2015 15:54:22</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>11/01/2014 12:44:26</publishTime>
@@ -183,7 +196,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/01/2014 12:44:26</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/03/2015 15:03:51</publishTime>
+      <publishTime>04/06/2015 21:02:27</publishTime>
     </File>
   </ItemGroup>
 </Project>

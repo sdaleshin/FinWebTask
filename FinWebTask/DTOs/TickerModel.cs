@@ -10,5 +10,7 @@ namespace FinWebTask.DTOs
         public string Ticker;
         public DateTime Date { get; set; }
         public double AVG { get; set; }
+        public double Norm { get; set; }
+        public int Index { get; set; }
     }
 }
