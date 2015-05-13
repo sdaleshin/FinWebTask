@@ -77,7 +77,7 @@
             })
         });
         function showPlots(resp) {
-            var xCategories = _.chain(resp.tickers).pluck('Date').map(function (m) { return moment(m).format('DD.MM.YYYY') }).value();
+            var xCategories = _.chain(resp.realData).pluck('Date').map(function (m) { return moment(m).format('DD.MM.YYYY') }).value();
             $('.prediction-result').show();
             $('#container').highcharts({
                 title: {
@@ -99,6 +99,11 @@
                         value: 0,
                         width: 1,
                         color: '#808080'
+                    },
+                    {
+                        value: 1,
+                        width: 1,
+                        color: '#D34444'
                     }]
                 },
                 tooltip: {
@@ -111,8 +116,12 @@
                     borderWidth: 0
                 },
                 series: [{
-                    name: $('.ticker-select').val(),
-                    data: _.chain(resp.tickers).pluck('AVG').map(function (m) { return Number(Number(m).toFixed(2)); }).value()
+                    name: 'Реальные данные прогноз',
+                    data: _.chain(resp.realData).pluck('AVG').map(function (m) { return Number(Number(m).toFixed(2)); }).value()
+                },
+                {
+                    name: 'Прогноз',
+                    data: _.chain(resp.predictionData).pluck('AVG').map(function (m) { return Number(Number(m).toFixed(2)); }).value()
                 }]
             });
         }
